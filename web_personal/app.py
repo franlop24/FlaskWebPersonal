@@ -1,7 +1,10 @@
 from crypt import methods
 from flask import Flask, render_template, request
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret'
 
 
 ######### Rutas Public ###########
@@ -47,7 +50,13 @@ def portfolio():
     ]
     return render_template('public/portfolio.html', projects=projects)
 
-############ Rutas ############
+################# Formularios de WTForms ##################
+class LoginForm(FlaskForm):
+    username = StringField('Username')
+    password = PasswordField('Password')
+    submit = SubmitField('Login')
+
+############ Rutas Login ############
 @app.route('/auth/login')
 def login():
     return render_template('auth/login.html')
