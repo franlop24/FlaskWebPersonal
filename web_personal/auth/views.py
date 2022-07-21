@@ -1,5 +1,7 @@
 ########### Imports Flask & Python ##########
-from flask import render_template, Blueprint
+from flask import redirect, render_template, Blueprint, url_for
+
+from db.db_connection import get_connection
 
 ########### Imports Forms ##########
 from .forms import LoginForm, RegisterForm
@@ -19,9 +21,26 @@ def login():
 
     return render_template('auth/login.html', form=form)
 
-@auth_blueprint.route('/register')
+@auth_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
 
     form = RegisterForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        last_name = form.last_name.data
+        email = form.email.data
+        password = form.password.data
+        phone = form.phone.data
+        is_married = form.is_married.data
+        gender = form.gender.data
+
+        conn = get_connection()
+        with conn.cursor() as cursor:
+            sql = "INSERT INTO users (name, last_name, email, password, phone, is_married, gender) "
+            sql += f"VALUES ('{name}', '{last_name}', '{email}', '{password}', '{phone}', '{is_married}', '{gender}')"
+            cursor.execute(sql)
+            conn.commit()
+            return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html', form=form)
