@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}List Projects{% endblock %}
+
+{% block header_title %}List Projects{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <a class="btn btn-primary m-3" href="{{ url_for('project.new') }}">Nuevo Proyecto</a>
+        <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre de Proyecto</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Optiones</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                  <th scope="row">1</th>
+                  <td>{{ project.name }}</td>
+                  <td>{{ project.description }}</td>
+                  <td>
+                    <button class="btn btn-danger">Eliminar</button>
+                    <button class="btn btn-warning">Edit</button>
+                  </td>
+                </tr>    
+                {% endfor %}
+                    
+            </tbody>
+          </table>
+    </div>
+{% endblock %}
+    
