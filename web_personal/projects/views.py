@@ -1,6 +1,8 @@
 ################# Imorts de Flask & Python #################
 from flask import render_template, request, Blueprint
 
+from .forms import NewProjectForm
+
 project_blueprint = Blueprint('project', __name__)
 
 #### localhost:5000/project/list ####
@@ -48,7 +50,8 @@ def show(project_id):
 ################### TODO: Create New Project #################
 @project_blueprint.route('/new')
 def new():
-    return render_template('project/new.html')
+    form = NewProjectForm()
+    return render_template('project/new.html', form=form)
 
 ################### TODO: Update a Project #################
 @project_blueprint.route('/<project_id>/edit')
