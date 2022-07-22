@@ -6,7 +6,15 @@
 
 {% block content %}
     <div class="container">
-        <a class="btn btn-primary m-3" href="{{ url_for('project.new') }}">Nuevo Proyecto</a>
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+        <a class="btn btn-primary my-3" href="{{ url_for('project.new') }}">Nuevo Proyecto</a>
         <table class="table">
             <thead class="thead-dark">
               <tr>
@@ -19,7 +27,7 @@
             <tbody>
                 {% for project in projects %}
                 <tr>
-                  <th scope="row">1</th>
+                  <th scope="row">{{ project.id }}</th>
                   <td>{{ project.name }}</td>
                   <td>{{ project.description }}</td>
                   <td>

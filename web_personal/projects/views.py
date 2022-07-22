@@ -1,8 +1,9 @@
 ################# Imorts de Flask & Python #################
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, redirect, url_for, flash
 
 from .forms import NewProjectForm
 from .image_handler import add_image
+from db.db_connection import get_connection
 
 project_blueprint = Blueprint('project', __name__)
 
@@ -41,6 +42,11 @@ def list():
             'url': 'https://www.xataka.com'
         },
     ]
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = "SELECT * FROM project"
+        cursor.execute(sql)
+        projects = cursor.fetchall()
     return render_template('project/list.html', projects=projects)
 
 ################### TODO: Show Project #################
@@ -59,10 +65,15 @@ def new():
         url = form.url.data
         image = add_image(form.image.data)
 
-        return str([name, description, url, image])
-        
+        conn = get_connection()
+        with conn.cursor() as cursor:
+            sql = "INSERT INTO project (name, description, url, image) "
+            sql += f"VALUES ('{name}', '{description}', '{url}', '{image}')"
+            cursor.execute(sql)
+            conn.commit()
+            flash('Proyecto creado correctamente')
+            return redirect(url_for('project.list'))
 
-        ##### Implementar la lógica para Guardar
     return render_template('project/new.html', form=form)
 
 ################### TODO: Update a Project #################
