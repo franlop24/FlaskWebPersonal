@@ -2,6 +2,7 @@
 from flask import render_template, request, Blueprint
 
 from .forms import NewProjectForm
+from .image_handler import add_image
 
 project_blueprint = Blueprint('project', __name__)
 
@@ -48,9 +49,20 @@ def show(project_id):
     return render_template('project/show.html', project_id=project_id)
 
 ################### TODO: Create New Project #################
-@project_blueprint.route('/new')
+@project_blueprint.route('/new', methods=['GET', 'POST'])
 def new():
     form = NewProjectForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        description = form.description.data
+        url = form.url.data
+        image = add_image(form.image.data)
+
+        return str([name, description, url, image])
+        
+
+        ##### Implementar la lógica para Guardar
     return render_template('project/new.html', form=form)
 
 ################### TODO: Update a Project #################
