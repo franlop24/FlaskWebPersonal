@@ -13,35 +13,9 @@ project_blueprint = Blueprint('project', __name__)
 #### localhost:5000/project/34/edit ####
 #### localhost:5000/project/34/delete ####
 
-################### TODO: List Projects #################
+################### List Projects #################
 @project_blueprint.route('/list')
 def list():
-    projects = [
-        {
-            'name':'Primer proyecto',
-            'description':'As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm....',
-            'image':'img/home-bg.jpg',
-            'url': 'https://www.google.com'
-        },
-        {
-            'name':'Segundo proyecto',
-            'description':'As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm....',
-            'image':'img/about-bg.jpg',
-            'url': 'https://www.xataka.com'
-        },
-        {
-            'name':'Primer proyecto',
-            'description':'As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm....',
-            'image':'img/home-bg.jpg',
-            'url': 'https://www.google.com'
-        },
-        {
-            'name':'Segundo proyecto',
-            'description':'As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm....',
-            'image':'img/about-bg.jpg',
-            'url': 'https://www.xataka.com'
-        },
-    ]
     conn = get_connection()
     with conn.cursor() as cursor:
         sql = "SELECT * FROM project"
@@ -49,12 +23,17 @@ def list():
         projects = cursor.fetchall()
     return render_template('project/list.html', projects=projects)
 
-################### TODO: Show Project #################
+################### Show Project #################
 @project_blueprint.route('/<project_id>')
 def show(project_id):
-    return render_template('project/show.html', project_id=project_id)
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = f"SELECT * FROM project WHERE id = {project_id}"
+        cursor.execute(sql)
+        project = cursor.fetchone()
+    return render_template('project/show.html', project=project)
 
-################### TODO: Create New Project #################
+################### Create New Project #################
 @project_blueprint.route('/new', methods=['GET', 'POST'])
 def new():
     form = NewProjectForm()
@@ -116,9 +95,15 @@ def edit(project_id):
                 flash('Proyecto actualizado correctamente')
                 return redirect(url_for('project.list'))
 
-################### TODO: Delete a Project #################
-@project_blueprint.route('/<project_id>/delete')
+################### Delete a Project #################
+@project_blueprint.route('/<project_id>/delete', methods=['POST'])
 def delete(project_id):
-    return "Delete Page"
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = f"DELETE FROM project WHERE id = {project_id}"
+        cursor.execute(sql)
+        conn.commit()
+        flash('Proyecto eliminado correctamente')
+        return redirect(url_for('project.list'))
 
 

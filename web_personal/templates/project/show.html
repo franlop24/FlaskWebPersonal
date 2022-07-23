@@ -3,3 +3,15 @@
 {% block title %}Show Project{% endblock %}
 
 {% block header_title %}Show Project{% endblock %}
+
+{% block content %}
+<div class="container">
+    <hr>
+    <h2>{{ project.name }}</h2>
+    <p>{{ project.description }}</p>
+    <div class="form-group">
+        <img src="{{ url_for('static', filename='img/' + project.image ) }}" alt="{{ image }}" class="img-thumbnail">
+    </div>
+    <a href="{{ url_for('project.list') }}" class="btn btn-secondary" >Regresar</a>
+</div>
+{% endblock %}
