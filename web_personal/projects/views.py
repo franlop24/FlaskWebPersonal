@@ -93,6 +93,28 @@ def edit(project_id):
         image = project['image']
         
         return render_template('project/new.html', form=form, image=image)
+    if request.method == 'POST':
+
+        form = UpdateProjectForm()
+
+        if form.validate_on_submit():
+            name = form.name.data
+            description = form.description.data
+            url = form.url.data
+            if form.image.data:
+                image = add_image(form.image.data)
+                sql = f"UPDATE project SET name = '{name}', description = '{description}'," 
+                sql += f"url = '{url}', image = '{image}' WHERE id = {project_id}"
+            else:
+                sql = f"UPDATE project SET name = '{name}', description = '{description}'," 
+                sql += f"url = '{url}' WHERE id = {project_id}"
+            
+            conn = get_connection()
+            with conn.cursor() as cursor:
+                cursor.execute(sql)
+                conn.commit()
+                flash('Proyecto actualizado correctamente')
+                return redirect(url_for('project.list'))
 
 ################### TODO: Delete a Project #################
 @project_blueprint.route('/<project_id>/delete')

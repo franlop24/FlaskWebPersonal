@@ -36,7 +36,9 @@
             {% endif %}
         </div>
         {% if image %}
-        <p>{{ image }}</p>
+        <div class="form-group">
+            <img src="{{ url_for('static', filename='img/' + image ) }}" alt="{{ image }}" class="img-thumbnail" width="200px">
+        </div>
         {% endif %}
         <div class="form-group">
             {{ form.image(class="form-control-file") }}
