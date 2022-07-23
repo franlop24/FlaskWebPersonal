@@ -35,6 +35,9 @@
                 {% endfor %}          
             {% endif %}
         </div>
+        {% if image %}
+        <p>{{ image }}</p>
+        {% endif %}
         <div class="form-group">
             {{ form.image(class="form-control-file") }}
             {% if form.image.errors %}

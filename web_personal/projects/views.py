@@ -1,7 +1,7 @@
 ################# Imorts de Flask & Python #################
 from flask import render_template, request, Blueprint, redirect, url_for, flash
 
-from .forms import NewProjectForm
+from .forms import NewProjectForm, UpdateProjectForm
 from .image_handler import add_image
 from db.db_connection import get_connection
 
@@ -76,10 +76,23 @@ def new():
 
     return render_template('project/new.html', form=form)
 
-################### TODO: Update a Project #################
-@project_blueprint.route('/<project_id>/edit')
+################### Update a Project #################
+@project_blueprint.route('/<project_id>/edit', methods=['GET', 'POST'])
 def edit(project_id):
-    return "Edit Page"
+    if request.method == 'GET':
+        conn = get_connection()
+        with conn.cursor() as cursor:
+            sql = f"SELECT * FROM project WHERE id = {project_id}"
+            cursor.execute(sql)
+            project = cursor.fetchone()
+
+        form = UpdateProjectForm()
+        form.name.data = project['name']
+        form.description.data = project['description']
+        form.url.data = project['url']
+        image = project['image']
+        
+        return render_template('project/new.html', form=form, image=image)
 
 ################### TODO: Delete a Project #################
 @project_blueprint.route('/<project_id>/delete')
