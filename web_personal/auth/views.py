@@ -1,5 +1,6 @@
 ########### Imports Flask & Python ##########
 from flask import redirect, render_template, Blueprint, url_for
+from werkzeug.security import generate_password_hash
 
 from db.db_connection import get_connection
 
@@ -30,7 +31,9 @@ def register():
         name = form.name.data
         last_name = form.last_name.data
         email = form.email.data
-        password = form.password.data
+        password = generate_password_hash(form.password.data)
+        ############ Cifrado de Password ###########
+        hashed_password = generate_password_hash(password)
         phone = form.phone.data
         is_married = form.is_married.data
         gender = form.gender.data
@@ -38,7 +41,7 @@ def register():
         conn = get_connection()
         with conn.cursor() as cursor:
             sql = "INSERT INTO users (name, last_name, email, password, phone, is_married, gender) "
-            sql += f"VALUES ('{name}', '{last_name}', '{email}', '{password}', '{phone}', '{is_married}', '{gender}')"
+            sql += f"VALUES ('{name}', '{last_name}', '{email}', '{hashed_password}', '{phone}', '{is_married}', '{gender}')"
             cursor.execute(sql)
             conn.commit()
             return redirect(url_for('auth.login'))
