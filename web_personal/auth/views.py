@@ -15,10 +15,10 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        email = form.email.data
+        username = form.username.data
         password = form.password.data
 
-        return render_template('admin/index.html', email=email)
+        return render_template('admin/index.html')
 
     return render_template('auth/login.html', form=form)
 
@@ -28,20 +28,17 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        name = form.name.data
-        last_name = form.last_name.data
+        username = form.username.data
         email = form.email.data
-        password = generate_password_hash(form.password.data)
+        password = form.password.data
+
         ############ Cifrado de Password ###########
         hashed_password = generate_password_hash(password)
-        phone = form.phone.data
-        is_married = form.is_married.data
-        gender = form.gender.data
 
         conn = get_connection()
         with conn.cursor() as cursor:
-            sql = "INSERT INTO users (name, last_name, email, password, phone, is_married, gender) "
-            sql += f"VALUES ('{name}', '{last_name}', '{email}', '{hashed_password}', '{phone}', '{is_married}', '{gender}')"
+            sql = "INSERT INTO users (username, email, password) "
+            sql += f"VALUES ('{username}', '{email}', '{hashed_password}')"
             cursor.execute(sql)
             conn.commit()
             return redirect(url_for('auth.login'))

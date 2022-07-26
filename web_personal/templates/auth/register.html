@@ -11,32 +11,35 @@
     <form method="post">
         {{ form.hidden_tag() }}
         <div class="form-group">
-            {{ form.name.label }}
-            {{ form.name(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.last_name.label }}
-            {{ form.last_name(class="form-control") }}
+            {{ form.username.label }}
+            {{ form.username(class="form-control") }}
+            {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="form-group">
             {{ form.email.label }}
             {{ form.email(class="form-control") }}
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="form-group">
             {{ form.password.label }}
             {{ form.password(class="form-control") }}
+            {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="form-group">
-            {{ form.phone.label }}
-            {{ form.phone(class="form-control") }}
-        </div>
-        <hr>
-        {{ form.is_married.label }}
-        {{ form.is_married }}            
-        <hr>
-        {{ form.gender.label }}
-        <div class="input-group mb-3">
-            {{ form.gender(class="custom-select") }}
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(class="form-control") }}
         </div>
         {{ form.submit(class="btn btn-primary") }}
         <a type="button" class="btn btn-secondary" href="{{ url_for('auth.login') }}">Login</a>
