@@ -3,7 +3,7 @@ from flask import (redirect, render_template, request,
                 Blueprint, url_for)
 from werkzeug.security import generate_password_hash
 
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user
 
 from db.db_connection import get_connection
 from .models import get_user_by_username_and_password
@@ -33,6 +33,12 @@ def login():
             return redirect(next or url_for('index'))
 
     return render_template('auth/login.html', form=form)
+
+@auth_blueprint.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
 
 @auth_blueprint.route('/register', methods=['GET', 'POST'])
 def register():

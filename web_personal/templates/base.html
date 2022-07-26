@@ -41,6 +41,15 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('contact') }}">Contacto</a>
             </li>
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.logout') }}">Salir</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('auth.login') }}">Entrar</a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>

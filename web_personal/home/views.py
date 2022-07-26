@@ -9,12 +9,10 @@ def index():
     return render_template('public/index.html')
 
 @home_blueprint.route('/about')
-@login_required
 def about():
     return render_template('public/about.html')
 
 @home_blueprint.route('/contact')
-@login_required
 def contact():
     return render_template('public/contact.html')
 

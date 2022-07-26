@@ -1,5 +1,6 @@
 ################# Imorts de Flask & Python #################
 from flask import render_template, request, Blueprint, redirect, url_for, flash
+from flask_login import login_required
 
 from .forms import NewProjectForm, UpdateProjectForm
 from .image_handler import add_image
@@ -15,6 +16,7 @@ project_blueprint = Blueprint('project', __name__)
 
 ################### List Projects #################
 @project_blueprint.route('/list')
+@login_required
 def list():
     conn = get_connection()
     with conn.cursor() as cursor:
@@ -25,6 +27,7 @@ def list():
 
 ################### Show Project #################
 @project_blueprint.route('/<project_id>')
+@login_required
 def show(project_id):
     conn = get_connection()
     with conn.cursor() as cursor:
@@ -35,6 +38,7 @@ def show(project_id):
 
 ################### Create New Project #################
 @project_blueprint.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     form = NewProjectForm()
 
@@ -57,6 +61,7 @@ def new():
 
 ################### Update a Project #################
 @project_blueprint.route('/<project_id>/edit', methods=['GET', 'POST'])
+@login_required
 def edit(project_id):
     if request.method == 'GET':
         conn = get_connection()
@@ -97,6 +102,7 @@ def edit(project_id):
 
 ################### Delete a Project #################
 @project_blueprint.route('/<project_id>/delete', methods=['POST'])
+@login_required
 def delete(project_id):
     conn = get_connection()
     with conn.cursor() as cursor:
