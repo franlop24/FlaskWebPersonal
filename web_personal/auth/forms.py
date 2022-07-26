@@ -7,7 +7,7 @@ from .models import get_user_by_email, get_user_by_username
 
 ################# Formularios de WTForms ##################
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Email()])
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Ingresar')
 

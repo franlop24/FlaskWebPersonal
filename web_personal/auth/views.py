@@ -3,6 +3,7 @@ from flask import redirect, render_template, Blueprint, url_for
 from werkzeug.security import generate_password_hash
 
 from db.db_connection import get_connection
+from .models import get_user_by_username_and_password
 
 ########### Imports Forms ##########
 from .forms import LoginForm, RegisterForm
@@ -12,13 +13,18 @@ auth_blueprint = Blueprint('auth', __name__)
 ############ Rutas Login ############
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+
     form = LoginForm()
 
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
 
-        return render_template('admin/index.html')
+        user = get_user_by_username_and_password(username, password)
+
+        if user:
+            return "Bienvenido!"
+            #return render_template('admin/index.html', message='Bienvenido')
 
     return render_template('auth/login.html', form=form)
 
