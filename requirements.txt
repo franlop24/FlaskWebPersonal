@@ -4,3 +4,4 @@ email_validator
 pymysql
 Pillow
 Werkzeug
+flask_login

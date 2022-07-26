@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from flask_login import login_required
 
 home_blueprint = Blueprint('', __name__)
 
@@ -8,10 +9,12 @@ def index():
     return render_template('public/index.html')
 
 @home_blueprint.route('/about')
+@login_required
 def about():
     return render_template('public/about.html')
 
 @home_blueprint.route('/contact')
+@login_required
 def contact():
     return render_template('public/contact.html')
 

@@ -1,6 +1,9 @@
 ########### Imports Flask & Python ##########
-from flask import redirect, render_template, Blueprint, url_for
+from flask import (redirect, render_template, request, 
+                Blueprint, url_for)
 from werkzeug.security import generate_password_hash
+
+from flask_login import login_user
 
 from db.db_connection import get_connection
 from .models import get_user_by_username_and_password
@@ -23,8 +26,11 @@ def login():
         user = get_user_by_username_and_password(username, password)
 
         if user:
-            return "Bienvenido!"
-            #return render_template('admin/index.html', message='Bienvenido')
+            login_user(user)
+
+            next = request.args.get('next')
+            
+            return redirect(next or url_for('index'))
 
     return render_template('auth/login.html', form=form)
 
